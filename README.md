@@ -14,10 +14,10 @@
 悪い事してないのにウイルス判定されます。悲しい…。
 
 ## develop
-python -m venv env
-env\Scripts\activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+python -m venv env  
+env\Scripts\activate  
+python -m pip install --upgrade pip  
+pip install -r requirements.txt  
 
 ## to exe
 pyinstaller GenshinDailyGetter.py --onefile --noconsole
