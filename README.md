@@ -4,7 +4,7 @@
 1. download GenshinDailyGetter.exe
     - https://github.com/Knoth/GenshinDailyGetter/releases/
 2. Place the file in any location.  
-    like `C:\\Program Files\GenshinDailyGetter\GenshinDailyGetter.exe`.
+    like `C:\\GenshinDailyGetter\GenshinDailyGetter.exe`.
 3. Double click GenshinDailyGetter.exe to initialize.
 4. __All done.__  
     you can receive hoyolab's daily login bonus automatically when you start your pc.
