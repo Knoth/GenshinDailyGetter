@@ -119,7 +119,7 @@ class GenshinDailyGetter:
         return value
 
     @raise_except
-    def chromedriver_install(retries=0):
+    def chromedriver_install(self, retries=0):
         """ ChromeDriverをインストールする。  
         ネットワークエラー時は1秒毎に再試行を行い、10回接続に失敗した場合はダイアログを表示する
         """
