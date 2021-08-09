@@ -957,13 +957,13 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.1776.0_x64__qbz5n2kfra8p0\\lib\\tracemalloc.py',
    'PYMODULE'),
-  ('_py_abc',
-   'C:\\Program '
-   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.1776.0_x64__qbz5n2kfra8p0\\lib\\_py_abc.py',
-   'PYMODULE'),
   ('stringprep',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.1776.0_x64__qbz5n2kfra8p0\\lib\\stringprep.py',
+   'PYMODULE'),
+  ('_py_abc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.1776.0_x64__qbz5n2kfra8p0\\lib\\_py_abc.py',
    'PYMODULE'),
   ('chromedriver_autoinstaller',
    'o:\\onedrive\\020.develop\\006.pythonprojects\\genshindailygetter\\env\\lib\\site-packages\\chromedriver_autoinstaller\\__init__.py',

@@ -40,16 +40,16 @@ class GenshinDailyGetter:
         # except:
         #     messagebox.showerror('エラー', 'スタートアップへの登録が失敗しました。サポートへ問い合わせください。')
 
-        profile = self.get_reg(self.PROFILE)
-        if profile is None:
-            # Chromeユーザを自動算出
-            profile = ''.join([os.environ['USERPROFILE'], r'\AppData\Local\Google\Chrome\User Data\Default'])
-            print(profile)
-            if os.path.exists(profile):
-                print(profile)
-                self.set_reg(self.PROFILE, profile)
-
         try:
+            profile = self.get_reg(self.PROFILE)
+            if profile is None:
+                # Chromeユーザを自動算出
+                profile = ''.join([os.environ['USERPROFILE'], r'\AppData\Local\Google\Chrome\User Data\Default'])
+                print(profile)
+                if os.path.exists(profile):
+                    print(profile)
+                    self.set_reg(self.PROFILE, profile)
+
             self.get_daily_bonus(profile)
         except FileNotFoundError:
             # 初期設定を実行する
