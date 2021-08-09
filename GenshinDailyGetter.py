@@ -1,6 +1,7 @@
 import os
 import sys
 import win32com.client
+from urllib.error import URLError
 import tkinter
 from tkinter import messagebox
 import winreg
@@ -118,11 +119,28 @@ class GenshinDailyGetter:
         return value
 
     @raise_except
+    def chromedriver_install(retries=0):
+        """ ChromeDriverをインストールする。  
+        ネットワークエラー時は1秒毎に再試行を行い、10回接続に失敗した場合はダイアログを表示する
+        """
+        if 10 < retries:
+            messagebox.showerror('ネットワークエラー', 'ネットワークに接続出来なかったため、ChromeDriverの更新に失敗しました。')
+            return
+        sleep(1)
+
+        # get ChromeDriver
+        try:
+            chromedriver_autoinstaller.install(cwd=True)
+        except URLError:
+            retries += 1
+            chromedriver_autoinstaller(retries)
+
+    @raise_except
     def get_daily_bonus(self, profile):
         """ デイリーボーナスを取得する """
 
         # get ChromeDriver
-        chromedriver_autoinstaller.install(cwd=True)
+        self.chromedriver_install()
 
         # get profile
         splited_profile = profile.split('\\')
@@ -148,7 +166,7 @@ class GenshinDailyGetter:
             sleep(2)
             login_button = driver.find_element_by_class_name('login-btn')
             if login_button is not None:
-                messagebox.showinfo('自動ログイン切れ', '手動でmihoyolabにログインを行い、自動ログインが可能なように設定してください。')
+                messagebox.showinfo('自動ログイン切れ', '手動でHoYoLABにログインを行い、自動ログインが可能なように設定してください。')
 
         finally:
             driver.quit()
