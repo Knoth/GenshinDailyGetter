@@ -13,6 +13,7 @@ class GenshinDailyGetter:
     
     def __init__(self) -> None:
         self.PROFILE = 'profile'
+        self.REG_PATH = r'Software\Knoth\GenshinDailyGetter'
 
     def raise_except(func):
         def wrapper(*args, **kwargs):
@@ -23,7 +24,6 @@ class GenshinDailyGetter:
         return wrapper
 
     def main(self) -> None:
-
         # Chromeユーザを取得
         profile = None
         try:
@@ -78,49 +78,49 @@ class GenshinDailyGetter:
         frm.mainloop()
 
     def set_startup(self):
-            # スタートアップ登録
-            shortcut_lnk = r'.\GenshinDailyGetter.lnk'
-            user_startup_path = ''.join([os.environ['AppData'], r'\Microsoft\Windows\Start Menu\Programs\StartUp'])
-            shortcut_path = ''.join([user_startup_path, shortcut_lnk])
-            # ショートカットを作成する
-            target = ''.join([os.getcwd(), r"\GenshinDailyGetter.exe startup"])
-            shell = win32com.client.Dispatch("WScript.Shell")
-            shortcut = shell.CreateShortCut(shortcut_path)
-            shortcut.Targetpath = target
-            shortcut.Workingdirectory = os.getcwd()
-            shortcut.WindowStyle = 1
-            shortcut.save()
+        """ 自動受取を行うよう設定する """
+        # スタートアップ登録
+        shortcut_lnk = r'.\GenshinDailyGetter.lnk'
+        user_startup_path = ''.join([os.environ['AppData'], r'\Microsoft\Windows\Start Menu\Programs\StartUp'])
+        shortcut_path = ''.join([user_startup_path, shortcut_lnk])
+        # ショートカットを作成する
+        target = ''.join([os.getcwd(), r"\GenshinDailyGetter.exe"])
+        shell = win32com.client.Dispatch("WScript.Shell")
+        shortcut = shell.CreateShortCut(shortcut_path)
+        shortcut.Targetpath = target
+        shortcut.Arguments = 'startup'
+        shortcut.Workingdirectory = os.getcwd()
+        shortcut.WindowStyle = 1
+        shortcut.save()
         
 
     @raise_except
     def set_reg(self, name, value):
         """ レジストリに書き込む """
-        reg_path = r'Software\Knoth\GenshinDailyGetter'
-        key = winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, reg_path, access=winreg.KEY_WRITE)
+        key = winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, self.REG_PATH, access=winreg.KEY_WRITE)
         winreg.SetValueEx(key, name, 0, winreg.REG_SZ, value)
         winreg.CloseKey(key)
 
     @raise_except
     def delete_reg(self):
         """ レジストリを削除する """
-        reg_path = r'Software\Knoth\GenshinDailyGetter'
         try:
-            winreg.DeleteKeyEx(winreg.HKEY_CURRENT_USER, reg_path, access=winreg.KEY_WRITE)
+            winreg.DeleteKeyEx(winreg.HKEY_CURRENT_USER, self.REG_PATH, access=winreg.KEY_WRITE)
         except FileNotFoundError:
             pass # 無いなら無いで問題ない
 
     @raise_except
     def get_reg(self, name):
         """ レジストリを読み込む """
-        reg_path = r'Software\Knoth\GenshinDailyGetter'
-        key = winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, reg_path, access=winreg.KEY_READ)
+        key = winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, self.REG_PATH, access=winreg.KEY_READ)
         value, type_id = winreg.QueryValueEx(key, name)
         winreg.CloseKey(key)
         return value
 
     @raise_except
     def get_daily_bonus(self, profile):
-        
+        """ デイリーボーナスを取得する """
+
         # get ChromeDriver
         chromedriver_autoinstaller.install(cwd=True)
 
