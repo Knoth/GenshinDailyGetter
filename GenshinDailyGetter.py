@@ -133,7 +133,7 @@ class GenshinDailyGetter:
             chromedriver_autoinstaller.install(cwd=True)
         except URLError:
             retries += 1
-            chromedriver_autoinstaller(retries)
+            self.chromedriver_install(retries)
 
     @raise_except
     def get_daily_bonus(self, profile):
