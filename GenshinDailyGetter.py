@@ -82,15 +82,14 @@ class GenshinDailyGetter:
             shortcut_lnk = r'.\GenshinDailyGetter.lnk'
             user_startup_path = ''.join([os.environ['AppData'], r'\Microsoft\Windows\Start Menu\Programs\StartUp'])
             shortcut_path = ''.join([user_startup_path, shortcut_lnk])
-            if not os.path.exists(shortcut_path):
-                # ショートカットを作成する
-                target = ''.join([os.getcwd(), r"\GenshinDailyGetter.exe startup"])
-                shell = win32com.client.Dispatch("WScript.Shell")
-                shortcut = shell.CreateShortCut(shortcut_path)
-                shortcut.Targetpath = target
-                shortcut.Workingdirectory = os.getcwd()
-                shortcut.WindowStyle = 1 # 7 - Minimized, 3 - Maximized, 1 - Normal
-                shortcut.save()
+            # ショートカットを作成する
+            target = ''.join([os.getcwd(), r"\GenshinDailyGetter.exe startup"])
+            shell = win32com.client.Dispatch("WScript.Shell")
+            shortcut = shell.CreateShortCut(shortcut_path)
+            shortcut.Targetpath = target
+            shortcut.Workingdirectory = os.getcwd()
+            shortcut.WindowStyle = 1
+            shortcut.save()
         
 
     @raise_except
