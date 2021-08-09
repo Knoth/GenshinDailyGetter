@@ -23,37 +23,20 @@ class GenshinDailyGetter:
         return wrapper
 
     def main(self) -> None:
-        # try:
-        # スタートアップ登録
-        shortcut_lnk = r'.\GenshinDailyGetter.lnk'
-        user_startup_path = ''.join([os.environ['AppData'], r'\Microsoft\Windows\Start Menu\Programs\StartUp'])
-        shortcut_path = ''.join([user_startup_path, shortcut_lnk])
-        if not os.path.exists(shortcut_path):
-            # ショートカットを作成する
-            target = ''.join([os.getcwd(), r"\GenshinDailyGetter.exe"])
-            shell = win32com.client.Dispatch("WScript.Shell")
-            shortcut = shell.CreateShortCut(shortcut_path)
-            shortcut.Targetpath = target
-            # shortcut.IconLocation = r""
-            shortcut.WindowStyle = 1 # 7 - Minimized, 3 - Maximized, 1 - Normal
-            shortcut.save()
-        # except:
-        #     messagebox.showerror('エラー', 'スタートアップへの登録が失敗しました。サポートへ問い合わせください。')
 
+        # Chromeユーザを取得
+        profile = None
         try:
             profile = self.get_reg(self.PROFILE)
-            if profile is None:
-                # Chromeユーザを自動算出
-                profile = ''.join([os.environ['USERPROFILE'], r'\AppData\Local\Google\Chrome\User Data\Default'])
-                print(profile)
-                if os.path.exists(profile):
-                    print(profile)
-                    self.set_reg(self.PROFILE, profile)
-
-            self.get_daily_bonus(profile)
         except FileNotFoundError:
-            # 初期設定を実行する
-            self.init()
+            # Chromeユーザを自動算出
+            profile = ''.join([os.environ['USERPROFILE'], r'\AppData\Local\Google\Chrome\User Data\Default'])
+            if os.path.exists(profile):
+                self.set_reg(self.PROFILE, profile)
+
+        # デイリーボーナス取得
+        try:
+            self.get_daily_bonus(profile)
         except NoSuchElementException:
             print('デイリーボーナス取得済み')
         except InvalidArgumentException:
@@ -94,13 +77,38 @@ class GenshinDailyGetter:
         save_btn.place(x=300, y=80, width=60, height=30)
         frm.mainloop()
 
+    def set_startup(self):
+            # スタートアップ登録
+            shortcut_lnk = r'.\GenshinDailyGetter.lnk'
+            user_startup_path = ''.join([os.environ['AppData'], r'\Microsoft\Windows\Start Menu\Programs\StartUp'])
+            shortcut_path = ''.join([user_startup_path, shortcut_lnk])
+            if not os.path.exists(shortcut_path):
+                # ショートカットを作成する
+                target = ''.join([os.getcwd(), r"\GenshinDailyGetter.exe startup"])
+                shell = win32com.client.Dispatch("WScript.Shell")
+                shortcut = shell.CreateShortCut(shortcut_path)
+                shortcut.Targetpath = target
+                shortcut.Workingdirectory = os.getcwd()
+                shortcut.WindowStyle = 1 # 7 - Minimized, 3 - Maximized, 1 - Normal
+                shortcut.save()
+        
+
     @raise_except
     def set_reg(self, name, value):
         """ レジストリに書き込む """
         reg_path = r'Software\Knoth\GenshinDailyGetter'
-        key = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, reg_path, access=winreg.KEY_WRITE)
+        key = winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, reg_path, access=winreg.KEY_WRITE)
         winreg.SetValueEx(key, name, 0, winreg.REG_SZ, value)
         winreg.CloseKey(key)
+
+    @raise_except
+    def delete_reg(self):
+        """ レジストリを削除する """
+        reg_path = r'Software\Knoth\GenshinDailyGetter'
+        try:
+            winreg.DeleteKeyEx(winreg.HKEY_CURRENT_USER, reg_path, access=winreg.KEY_WRITE)
+        except FileNotFoundError:
+            pass # 無いなら無いで問題ない
 
     @raise_except
     def get_reg(self, name):
@@ -151,7 +159,15 @@ if __name__ == "__main__":
     args = sys.argv
     gdg = GenshinDailyGetter()
 
-    if 2 == len(args) and args[1] == 'init':
+    if 2 != len(args):
+        # exeからの起動
+        gdg.set_startup()
+        gdg.main()
+    elif args[1] == 'init':
+        # コマンドからの引数付き起動
+        gdg.delete_reg()
+        gdg.set_startup()
         gdg.init()
-    else:
+    elif args[1] == 'startup':
+        # スタートアップからの起動
         gdg.main()
