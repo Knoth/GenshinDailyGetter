@@ -10,6 +10,7 @@
 5. __All done.__  
     you can receive hoyolab's daily login bonus automatically when you start your pc.
 
+## 使い方
 1. GenshiDailyGetter.exeをダウンロード
     - https://github.com/Knoth/GenshinDailyGetter/releases/
 2. 以下のような任意の場所に配置します。  
