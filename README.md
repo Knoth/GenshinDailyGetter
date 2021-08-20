@@ -1,6 +1,7 @@
 # GenshinDailyGetter
 
 ## how to use
+0. log in HoYoLAB.
 1. download GenshinDailyGetter.exe
     - https://github.com/Knoth/GenshinDailyGetter/releases/
 2. Place the file in any location.  
@@ -11,6 +12,7 @@
     you can receive hoyolab's daily login bonus automatically when you start your pc.
 
 ## 使い方
+0. Google ChromeでHoYoLABにログインしてください。
 1. GenshiDailyGetter.exeをダウンロード
     - https://github.com/Knoth/GenshinDailyGetter/releases/
 2. 以下のような任意の場所に配置します。  
